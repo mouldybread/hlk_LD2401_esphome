@@ -2,7 +2,7 @@ LD2401P support for EspHome **TESTING/EXPERIMENTAL**
 =======
 Introduction
 --
-A fork of Rihan9/LD2412 to add esphome support for the LD2401p module which thus far was unsupported. This is a learning experience for me, I have no idea what I am doing.
+A fork of Rihan9/LD2412 to add esphome support for the Hi-Link LD2401P module which thus far was unsupported. This is a learning experience for me, I have no idea what I am doing.
 
 I have renamed everything accordingly and removed the option to set a 0.5m detection accuracy as this module does not support it.
 
