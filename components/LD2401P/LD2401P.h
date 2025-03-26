@@ -90,7 +90,6 @@ static const std::map<std::string, uint8_t> MODE_ENUM_TO_INT{
 enum DistanceResolutionStructure : uint8_t { DISTANCE_RESOLUTION_0_2 = 0x03, DISTANCE_RESOLUTION_0_5 = 0x01, DISTANCE_RESOLUTION_0_75 = 0x00 };
 
 static const std::map<std::string, uint8_t> DISTANCE_RESOLUTION_ENUM_TO_INT{{"0.2m", DISTANCE_RESOLUTION_0_2},
-                                                                            {"0.5m", DISTANCE_RESOLUTION_0_5},
                                                                             {"0.75m", DISTANCE_RESOLUTION_0_75}};
 static const std::map<uint8_t, std::string> DISTANCE_RESOLUTION_INT_TO_ENUM{{DISTANCE_RESOLUTION_0_2, "0.2m"},
                                                                             {DISTANCE_RESOLUTION_0_5, "0.5m"},
