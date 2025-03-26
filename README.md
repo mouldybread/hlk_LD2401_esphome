@@ -1,15 +1,17 @@
-LD2401P support for EspHome **TESTING/EXPERIMENTAL**
-=======
-Introduction
---
-A fork of Rihan9/LD2412 to add esphome support for the Hi-Link LD2401P module which thus far was unsupported. This is a learning experience for me, I have no idea what I am doing.
+
+# EspHome support for the HLK-LD2401P mmWave Sensor
+## ***TESTING/EXPERIMENTAL***
+
+
+
+### Introduction
+A fork of Rihan9/LD2412 to add esphome support for the Hi-Link HLK-LD2401P module which thus far was unsupported. This is a learning experience for me, I have no idea what I am doing.
 
 I have renamed everything accordingly and removed the option to set a 0.5m detection accuracy as this module does not support it. Without further modification all of the functionality except the light sensor seems to work.
 
 This model purports to be an improved version of the 2410. The default baud rate is 256000 and it consumes 74ma at 3.3V. The board measures 18 x 22mm. 
 
-Stability & function
---
+### Stability & function
 So far this sensor is able to run from the 3.3v pin on the D1 unlike the 2410. On start up the ESPHome integration may consider the device offline even though I can pull logs from the builder. Re-adding the device works around this. I have also found that adjusting parameters using home assistant seems to cause some instability. In my case though it is sufficient to make adjustments using the Bluetooth tool. I then disable bluetooth on the module and everything works well. I suspect that the device is fighting for current and that a more capable supply may resolve the issues. While this module claims to be 3.3V I have been able to power it with 5v via the VCC pin. Probably not a good idea in the long term. 
 
 I note that in the HiLink app there is no minimum detection distance for this module, only maximum. Hence you will be unable to set minimum distance via Home Assistant.
@@ -40,8 +42,8 @@ Untested:
 Not working:
 - Light sensor
   
-Configuration example
---
+### Configuration example
+
 ```
 #System Params
 captive_portal:
