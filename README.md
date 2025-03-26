@@ -16,16 +16,16 @@ Configuration example
 external_components:
   - source:
       type: git
-      url: https://github.com/Rihan9/LD2412
+      url: https://github.com/mouldybread/LD2401P
       ref: main
-    components: [LD2412]
+    components: [LD2401P]
 
-LD2412:
-  id: ld2412
+LD2401P:
+  id: ld2401p
   throttle: 3s
 
 binary_sensor:
-  - platform: LD2412
+  - platform: LD2401P
     has_target:
       name: Presence
     has_moving_target:
@@ -34,7 +34,7 @@ binary_sensor:
       name: Still Target
 
 sensor:
-  - platform: LD2412
+  - platform: LD2401P
     moving_distance:
       name : Moving Distance
     still_distance:
@@ -119,7 +119,7 @@ sensor:
         name: g13 still energy
 
 number:
-  - platform: LD2412
+  - platform: LD2401P
     timeout:
       name: "presence holding"
     min_distance_gate:
@@ -198,7 +198,7 @@ number:
         name: g13 still threshold
   
 select:
-  - platform: LD2412
+  - platform: LD2401P
     out_pin_level:
       name: 'Hardware output pin level'
     distance_resolution:
@@ -218,7 +218,7 @@ select:
     mode:
       name: "Mode"
 button:
-  - platform: LD2412
+  - platform: LD2401P
     factory_reset:
       name: "factory reset"
     restart:
@@ -227,28 +227,13 @@ button:
       name: query params
 
 text_sensor:
-  - platform: LD2412
+  - platform: LD2401P
     version:
       name: "firmware version"
     mac_address:
       name: "mac address"
 switch:
-  - platform: LD2412
+  - platform: LD2401P
     bluetooth:
       name: "Bluetooth"
-```
-What does work
---
-- generic Presence and distance
-- Still Presence, distance and energy
-- Moving presence, distance and energy
-- Start and End gate configuration
-- Delay for presence off (aka: timeout)
-- Firmware and Bluetooth mac address presentation
-- Output pin configuration
-- Restart and Query button
-- Uart Band Rate configuration
-- Distance resolution
-- Factory reset button
-- Bluetooth switch. 
-- Engineering mode: switch to and back from, threshold configuration, gate sensing and light sensor
+'''
