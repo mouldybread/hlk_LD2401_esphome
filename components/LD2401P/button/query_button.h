@@ -1,12 +1,12 @@
 #pragma once
 
 #include "esphome/components/button/button.h"
-#include "../LD2412.h"
+#include "../LD2401P.h"
 
 namespace esphome {
-namespace LD2412 {
+namespace LD2401P {
 
-class QueryButton : public button::Button, public Parented<LD2412Component> {
+class QueryButton : public button::Button, public Parented<LD2401PComponent> {
  public:
   QueryButton() = default;
 
@@ -14,5 +14,5 @@ class QueryButton : public button::Button, public Parented<LD2412Component> {
   void press_action() override;
 };
 
-}  // namespace LD2412
+}  // namespace LD2401P
 }  // namespace esphome
