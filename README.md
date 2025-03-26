@@ -10,7 +10,7 @@ This model purports to be an improved version of the 2410. The default baud rate
 
 Stability & function
 --
-So far this sensor is able to run from the 3.3v pin on the D1 unlike the 2410. On start up ESPHome will may consider the device offline even though I can pull logs from the builder. Re-adding the device works around this. I have also found that adjusting parameters using home assistant seems to cause some instability. In my case though it is sufficient to make adjustments using the Bluetooth tool. I then disable bluetooth on the module and everything works well. I suspect that the device is fighting for current and that a more capable supply may resolve the issues. While this module claims to be 3.3V I have been able to power it with 5v via the VCC pin. Probably not a good idea in the long term. 
+So far this sensor is able to run from the 3.3v pin on the D1 unlike the 2410. On start up the ESPHome integration may consider the device offline even though I can pull logs from the builder. Re-adding the device works around this. I have also found that adjusting parameters using home assistant seems to cause some instability. In my case though it is sufficient to make adjustments using the Bluetooth tool. I then disable bluetooth on the module and everything works well. I suspect that the device is fighting for current and that a more capable supply may resolve the issues. While this module claims to be 3.3V I have been able to power it with 5v via the VCC pin. Probably not a good idea in the long term. 
 
 I note that in the HiLink app there is no minimum detection distance for this module, only maximum. Hence you will be unable to set minimum distance via Home Assistant.
 
