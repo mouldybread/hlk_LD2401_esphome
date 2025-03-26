@@ -2,13 +2,15 @@ LD2401P support for EspHome **TESTING/EXPERIMENTAL**
 =======
 Introduction
 --
-A fork of Rihan9/LD2412 attempting to add esphome support for the LD2401p module which seems to be unsupported. At the moment nothing has been changed and this is a learning experience for me, I have no idea what I am doing.
+A fork of Rihan9/LD2412 attempting to add esphome support for the LD2401p module which seems to be unsupported. This is a learning experience for me, I have no idea what I am doing.
 
-So far, by using Rihan9/LD2412 without modification, basic functionality like presence, motion and distance work. Since this module supports bluetooth configuration this may actually be sufficient but for my own educational purposes I'm going to try and get more stuff working.
+I have renamed everything accordingly and removed the option to set a 0.5m detection accuracy as this module does not support it.
 
-This model purports to be an improved version of the 2410. The default baud rate is 256000, and it consumes 74ma at 3.3V. The board measures 18 x 22mm. 
+Without modification, all of the functionality except the light sensor seems to work.
 
-While this board claims to be 3.3V I have been able to power it with 5 volts via the VCC pin. Probably not a good idea in the long term. So far this sensor seems to be able to run from the 3.3v pin on the D1 Mini, unlike the 2410 which seems to draw too much current.
+This model purports to be an improved version of the 2410. The default baud rate is 256000 and it consumes 74ma at 3.3V. The board measures 18 x 22mm. 
+
+While this module claims to be 3.3V I have been able to power it with 5 volts via the VCC pin. Probably not a good idea in the long term. So far this sensor seems to be able to run from the 3.3v pin on the D1 Mini, unlike the 2410 which draws too much current in 3.3V.
 
 Configuration example
 --
