@@ -1,4 +1,4 @@
-#include "LD2412.h"
+#include "LD2401P.h"
 
 #include <utility>
 #ifdef USE_NUMBER
@@ -12,14 +12,14 @@
 #define lowbyte(val) (uint8_t)((val) &0xff)
 
 namespace esphome {
-namespace LD2412 {
+namespace LD2401P {
 
-static const char *const TAG = "LD2412";
+static const char *const TAG = "LD2401P";
 
-LD2412Component::LD2412Component() {}
+LD2401PComponent::LD2401PComponent() {}
 
-void LD2412Component::dump_config() {
-  ESP_LOGCONFIG(TAG, "LD2412:");
+void LD2401PComponent::dump_config() {
+  ESP_LOGCONFIG(TAG, "LD2401P:");
 #ifdef USE_BINARY_SENSOR
   LOG_BINARY_SENSOR("  ", "TargetBinarySensor", this->target_binary_sensor_);
   LOG_BINARY_SENSOR("  ", "MovingTargetBinarySensor", this->moving_target_binary_sensor_);
@@ -78,15 +78,15 @@ void LD2412Component::dump_config() {
   ESP_LOGCONFIG(TAG, "  Firmware Version : %s", const_cast<char *>(this->version_.c_str()));
 }
 
-void LD2412Component::setup() {
-  ESP_LOGCONFIG(TAG, "Setting up LD2412...");
+void LD2401PComponent::setup() {
+  ESP_LOGCONFIG(TAG, "Setting up LD2401P...");
   this->read_all_info();
   ESP_LOGCONFIG(TAG, "Mac Address : %s", const_cast<char *>(this->mac_.c_str()));
   ESP_LOGCONFIG(TAG, "Firmware Version : %s", const_cast<char *>(this->version_.c_str()));
-  ESP_LOGCONFIG(TAG, "LD2412 setup complete.");
+  ESP_LOGCONFIG(TAG, "LD2401P setup complete.");
 }
 
-void LD2412Component::read_all_info() {
+void LD2401PComponent::read_all_info() {
   this->set_config_mode_(true);
   this->get_version_();
   delay(10);  // NOLINT
@@ -112,13 +112,13 @@ void LD2412Component::read_all_info() {
 #endif
 }
 
-void LD2412Component::restart_and_read_all_info() {
+void LD2401PComponent::restart_and_read_all_info() {
   this->set_config_mode_(true);
   this->restart_();
   this->set_timeout(1000, [this]() { this->read_all_info(); });
 }
 
-void LD2412Component::loop() {
+void LD2401PComponent::loop() {
   const int max_line_length = 80;
   static uint8_t buffer[max_line_length];
 
@@ -127,7 +127,7 @@ void LD2412Component::loop() {
   }
 }
 
-void LD2412Component::send_command_(uint8_t command, const uint8_t *command_value, int command_value_len) {
+void LD2401PComponent::send_command_(uint8_t command, const uint8_t *command_value, int command_value_len) {
   ESP_LOGV(TAG, "Sending COMMAND %02X", command);
   // frame start bytes
   this->write_array(CMD_FRAME_HEADER, 4);
@@ -154,7 +154,7 @@ void LD2412Component::send_command_(uint8_t command, const uint8_t *command_valu
   delay(50);  // NOLINT
 }
 
-void LD2412Component::handle_periodic_data_(uint8_t *buffer, int len) {
+void LD2401PComponent::handle_periodic_data_(uint8_t *buffer, int len) {
   if (len < 12)
     return;  // 4 frame start bytes + 2 length bytes + 1 data end byte + 1 crc byte + 4 frame end bytes
   if (buffer[0] != 0xF4 || buffer[1] != 0xF3 || buffer[2] != 0xF2 || buffer[3] != 0xF1)  // check 4 frame start bytes
@@ -363,7 +363,7 @@ std::function<void(void)> set_number_value(number::Number *n, float value) {
 }
 #endif
 
-bool LD2412Component::handle_ack_data_(uint8_t *buffer, int len) {
+bool LD2401PComponent::handle_ack_data_(uint8_t *buffer, int len) {
   ESP_LOGV(TAG, "Handling ACK DATA for COMMAND %02X", buffer[COMMAND]);
   if (len < 10) {
     ESP_LOGE(TAG, "Error with last command : incorrect length");
@@ -564,7 +564,7 @@ bool LD2412Component::handle_ack_data_(uint8_t *buffer, int len) {
   return true;
 }
 
-void LD2412Component::readline_(int readch, uint8_t *buffer, int len) {
+void LD2401PComponent::readline_(int readch, uint8_t *buffer, int len) {
   static int pos = 0;
 
   if (readch >= 0) {
@@ -616,13 +616,13 @@ void LD2412Component::readline_(int readch, uint8_t *buffer, int len) {
   }
 }
 
-void LD2412Component::set_config_mode_(bool enable) {
+void LD2401PComponent::set_config_mode_(bool enable) {
   uint8_t cmd = enable ? CMD_ENABLE_CONF : CMD_DISABLE_CONF;
   uint8_t cmd_value[2] = {0x01, 0x00};
   this->send_command_(cmd, enable ? cmd_value : nullptr, 2);
 }
 
-void LD2412Component::set_bluetooth(bool enable) {
+void LD2401PComponent::set_bluetooth(bool enable) {
   this->set_config_mode_(true);
   uint8_t enable_cmd_value[2] = {0x01, 0x00};
   uint8_t disable_cmd_value[2] = {0x00, 0x00};
@@ -630,21 +630,21 @@ void LD2412Component::set_bluetooth(bool enable) {
   this->set_timeout(200, [this]() { this->restart_and_read_all_info(); });
 }
 
-void LD2412Component::set_distance_resolution(const std::string &state) {
+void LD2401PComponent::set_distance_resolution(const std::string &state) {
   this->set_config_mode_(true);
   uint8_t cmd_value[6] = {DISTANCE_RESOLUTION_ENUM_TO_INT.at(state), 0x00, 0x00, 0x00, 0x00, 0x00};
   this->send_command_(CMD_SET_DISTANCE_RESOLUTION, cmd_value, 6);
   this->set_timeout(200, [this]() { this->restart_and_read_all_info(); });
 }
 
-void LD2412Component::set_baud_rate(const std::string &state) {
+void LD2401PComponent::set_baud_rate(const std::string &state) {
   this->set_config_mode_(true);
   uint8_t cmd_value[2] = {BAUD_RATE_ENUM_TO_INT.at(state), 0x00};
   this->send_command_(CMD_SET_BAUD_RATE, cmd_value, 2);
   this->set_timeout(200, [this]() { this->restart_(); });
 }
 
-void LD2412Component::set_mode(const std::string &state) {
+void LD2401PComponent::set_mode(const std::string &state) {
   this->set_config_mode_(true);
   uint8_t cmd = CMD_NONE;
   switch(MODE_ENUM_TO_INT.at(state)){
@@ -668,13 +668,13 @@ void LD2412Component::set_mode(const std::string &state) {
   }
 }
 
-void LD2412Component::query_dymanic_background_correction_(){
+void LD2401PComponent::query_dymanic_background_correction_(){
   this->set_config_mode_(true);
   this->send_command_(CMD_QUEY_DYNAMIC_BACKGROUND_CORRECTION, nullptr, 0);
   this->set_config_mode_(false);
 }
 
-// void LD2412Component::set_bluetooth_password(const std::string &password) {
+// void LD2401PComponent::set_bluetooth_password(const std::string &password) {
 //   if (password.length() != 6) {
 //     ESP_LOGE(TAG, "set_bluetooth_password(): invalid password length, must be exactly 6 chars '%s'", password.c_str());
 //     return;
@@ -686,7 +686,7 @@ void LD2412Component::query_dymanic_background_correction_(){
 //   this->set_config_mode_(false);
 // }
 
-void LD2412Component::set_engineering_mode(bool enable) {
+void LD2401PComponent::set_engineering_mode(bool enable) {
   this->set_config_mode_(true);
   last_engineering_mode_change_millis_ = millis();
   uint8_t cmd = enable ? CMD_ENABLE_ENG : CMD_DISABLE_ENG;
@@ -694,7 +694,7 @@ void LD2412Component::set_engineering_mode(bool enable) {
   this->set_config_mode_(false);
 }
 
-void LD2412Component::factory_reset() {
+void LD2401PComponent::factory_reset() {
   this->set_config_mode_(true);
   this->send_command_(CMD_RESET, nullptr, 0);
 #ifdef USE_SELECT
@@ -705,20 +705,20 @@ void LD2412Component::factory_reset() {
   this->set_timeout(2000, [this]() { this->restart_and_read_all_info(); });
 }
 
-void LD2412Component::restart_() { this->send_command_(CMD_RESTART, nullptr, 0); }
+void LD2401PComponent::restart_() { this->send_command_(CMD_RESTART, nullptr, 0); }
 
-void LD2412Component::query_parameters_() { this->send_command_(CMD_QUERY, nullptr, 0); }
-void LD2412Component::get_version_() { this->send_command_(CMD_VERSION, nullptr, 0); }
-void LD2412Component::get_mac_() {
+void LD2401PComponent::query_parameters_() { this->send_command_(CMD_QUERY, nullptr, 0); }
+void LD2401PComponent::get_version_() { this->send_command_(CMD_VERSION, nullptr, 0); }
+void LD2401PComponent::get_mac_() {
   uint8_t cmd_value[2] = {0x01, 0x00};
   this->send_command_(CMD_MAC, cmd_value, 2);
 }
-void LD2412Component::get_distance_resolution_() { this->send_command_(CMD_QUERY_DISTANCE_RESOLUTION, nullptr, 0); }
+void LD2401PComponent::get_distance_resolution_() { this->send_command_(CMD_QUERY_DISTANCE_RESOLUTION, nullptr, 0); }
 
-// void LD2412Component::get_light_control_() { this->send_command_(CMD_QUERY_LIGHT_CONTROL, nullptr, 0); }
+// void LD2401PComponent::get_light_control_() { this->send_command_(CMD_QUERY_LIGHT_CONTROL, nullptr, 0); }
 
 #ifdef USE_NUMBER
-void LD2412Component::set_basic_config() {
+void LD2401PComponent::set_basic_config() {
   if (
       !this->min_distance_gate_number_->has_state() || 
       !this->max_distance_gate_number_->has_state() ||
@@ -760,7 +760,7 @@ void LD2412Component::set_basic_config() {
   this->set_config_mode_(false);
 }
 
-void LD2412Component::set_gate_threshold() {
+void LD2401PComponent::set_gate_threshold() {
   this->set_config_mode_(true);
   uint8_t value[14];// = {0x00, 0x00, lowbyte(gate),   highbyte(gate),   0x00, 0x00,
                     //   0x01, 0x00, lowbyte(motion), highbyte(motion), 0x00, 0x00,
@@ -779,7 +779,7 @@ void LD2412Component::set_gate_threshold() {
   // this->query_parameters_();
 }
 
-void LD2412Component::get_gate_threshold() {
+void LD2401PComponent::get_gate_threshold() {
   this->set_config_mode_(true);
   this->send_command_(CMD_QUERY_MOTION_GATE_SENS, nullptr, 0);
   delay(50);  // NOLINT
@@ -787,16 +787,16 @@ void LD2412Component::get_gate_threshold() {
   delay(50);  // NOLINT
   this->set_config_mode_(false);
 }
-void LD2412Component::set_gate_still_threshold_number(int gate, number::Number *n) {
+void LD2401PComponent::set_gate_still_threshold_number(int gate, number::Number *n) {
   this->gate_still_threshold_numbers_[gate] = n;
 }
 
-void LD2412Component::set_gate_move_threshold_number(int gate, number::Number *n) {
+void LD2401PComponent::set_gate_move_threshold_number(int gate, number::Number *n) {
   this->gate_move_threshold_numbers_[gate] = n;
 }
 #endif
 
-void LD2412Component::set_light_out_control() {
+void LD2401PComponent::set_light_out_control() {
 // #ifdef USE_NUMBER
 //   if (this->light_threshold_number_ != nullptr && this->light_threshold_number_->has_state()) {
 //     this->light_threshold_ = this->light_threshold_number_->state;
@@ -825,9 +825,9 @@ void LD2412Component::set_light_out_control() {
 }
 
 #ifdef USE_SENSOR
-void LD2412Component::set_gate_move_sensor(int gate, sensor::Sensor *s) { this->gate_move_sensors_[gate] = s; }
-void LD2412Component::set_gate_still_sensor(int gate, sensor::Sensor *s) { this->gate_still_sensors_[gate] = s; }
+void LD2401PComponent::set_gate_move_sensor(int gate, sensor::Sensor *s) { this->gate_move_sensors_[gate] = s; }
+void LD2401PComponent::set_gate_still_sensor(int gate, sensor::Sensor *s) { this->gate_still_sensors_[gate] = s; }
 #endif
 
-}  // namespace LD2412
+}  // namespace LD2401P
 }  // namespace esphome

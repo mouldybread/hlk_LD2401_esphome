@@ -29,7 +29,7 @@
 #include <map>
 
 namespace esphome {
-namespace LD2412 {
+namespace LD2401P {
 
 #define CHECK_BIT(var, pos) (((var) >> (pos)) & 1)
 
@@ -155,7 +155,7 @@ enum PeriodicDataValue : uint8_t { HEAD = 0XAA, END = 0x55, CHECK = 0x00 };
 enum AckDataStructure : uint8_t { COMMAND = 6, COMMAND_STATUS = 7 };
 
 //  char cmd[2] = {enable ? 0xFF : 0xFE, 0x00};
-class LD2412Component : public Component, public uart::UARTDevice {
+class LD2401PComponent : public Component, public uart::UARTDevice {
 #ifdef USE_SENSOR
   SUB_SENSOR(moving_target_distance)
   SUB_SENSOR(still_target_distance)
@@ -198,7 +198,7 @@ class LD2412Component : public Component, public uart::UARTDevice {
 #endif
 
  public:
-  LD2412Component();
+  LD2401PComponent();
   void setup() override;
   void dump_config() override;
   void loop() override;
@@ -271,5 +271,5 @@ class LD2412Component : public Component, public uart::UARTDevice {
 #endif
 };
 
-}  // namespace LD2412
+}  // namespace LD2401P
 }  // namespace esphome

@@ -14,9 +14,9 @@ from esphome.const import (
     ICON_LIGHTBULB,
     UNIT_LUX,
 )
-from . import CONF_LD2412_ID, LD2412Component
+from . import CONF_LD2401P_ID, LD2401PComponent
 
-DEPENDENCIES = ["LD2412"]
+DEPENDENCIES = ["LD2401P"]
 CONF_MOVING_DISTANCE = "moving_distance"
 CONF_STILL_DISTANCE = "still_distance"
 CONF_MOVING_ENERGY = "moving_energy"
@@ -26,7 +26,7 @@ CONF_MOVE_ENERGY = "move_energy"
 
 CONFIG_SCHEMA = cv.Schema(
     {
-        cv.GenerateID(CONF_LD2412_ID): cv.use_id(LD2412Component),
+        cv.GenerateID(CONF_LD2401P_ID): cv.use_id(LD2401PComponent),
         cv.Optional(CONF_MOVING_DISTANCE): sensor.sensor_schema(
             device_class=DEVICE_CLASS_DISTANCE,
             unit_of_measurement=UNIT_CENTIMETER,
@@ -80,30 +80,30 @@ CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
 
 
 async def to_code(config):
-    LD2412_component = await cg.get_variable(config[CONF_LD2412_ID])
+    LD2401P_component = await cg.get_variable(config[CONF_LD2401P_ID])
     if moving_distance_config := config.get(CONF_MOVING_DISTANCE):
         sens = await sensor.new_sensor(moving_distance_config)
-        cg.add(LD2412_component.set_moving_target_distance_sensor(sens))
+        cg.add(LD2401P_component.set_moving_target_distance_sensor(sens))
     if still_distance_config := config.get(CONF_STILL_DISTANCE):
         sens = await sensor.new_sensor(still_distance_config)
-        cg.add(LD2412_component.set_still_target_distance_sensor(sens))
+        cg.add(LD2401P_component.set_still_target_distance_sensor(sens))
     if moving_energy_config := config.get(CONF_MOVING_ENERGY):
         sens = await sensor.new_sensor(moving_energy_config)
-        cg.add(LD2412_component.set_moving_target_energy_sensor(sens))
+        cg.add(LD2401P_component.set_moving_target_energy_sensor(sens))
     if still_energy_config := config.get(CONF_STILL_ENERGY):
         sens = await sensor.new_sensor(still_energy_config)
-        cg.add(LD2412_component.set_still_target_energy_sensor(sens))
+        cg.add(LD2401P_component.set_still_target_energy_sensor(sens))
     if light_config := config.get(CONF_LIGHT):
         sens = await sensor.new_sensor(light_config)
-        cg.add(LD2412_component.set_light_sensor(sens))
+        cg.add(LD2401P_component.set_light_sensor(sens))
     if detection_distance_config := config.get(CONF_DETECTION_DISTANCE):
         sens = await sensor.new_sensor(detection_distance_config)
-        cg.add(LD2412_component.set_detection_distance_sensor(sens))
+        cg.add(LD2401P_component.set_detection_distance_sensor(sens))
     for x in range(14):
         if gate_conf := config.get(f"g{x}"):
             if move_config := gate_conf.get(CONF_MOVE_ENERGY):
                 sens = await sensor.new_sensor(move_config)
-                cg.add(LD2412_component.set_gate_move_sensor(x, sens))
+                cg.add(LD2401P_component.set_gate_move_sensor(x, sens))
             if still_config := gate_conf.get(CONF_STILL_ENERGY):
                 sens = await sensor.new_sensor(still_config)
-                cg.add(LD2412_component.set_gate_still_sensor(x, sens))
+                cg.add(LD2401P_component.set_gate_still_sensor(x, sens))

@@ -9,10 +9,10 @@ DEPENDENCIES = ["uart"]
 CODEOWNERS = ["@sebcaps", "@regevbr"]
 MULTI_CONF = True
 
-LD2412_ns = cg.esphome_ns.namespace("LD2412")
-LD2412Component = LD2412_ns.class_("LD2412Component", cg.Component, uart.UARTDevice)
+LD2401P_ns = cg.esphome_ns.namespace("LD2401P")
+LD2401PComponent = LD2401P_ns.class_("LD2401PComponent", cg.Component, uart.UARTDevice)
 
-CONF_LD2412_ID = "LD2412_id"
+CONF_LD2401P_ID = "LD2401P_id"
 
 CONF_MAX_MOVE_DISTANCE = "max_move_distance"
 CONF_MAX_STILL_DISTANCE = "max_still_distance"
@@ -21,7 +21,7 @@ CONF_MOVE_THRESHOLDS = [f"g{x}_move_threshold" for x in range(9)]
 
 CONFIG_SCHEMA = cv.Schema(
     {
-        cv.GenerateID(): cv.declare_id(LD2412Component),
+        cv.GenerateID(): cv.declare_id(LD2401PComponent),
         cv.Optional(CONF_THROTTLE, default="1000ms"): cv.All(
             cv.positive_time_period_milliseconds,
             cv.Range(min=cv.TimePeriod(milliseconds=1)),
@@ -62,7 +62,7 @@ CONFIG_SCHEMA = cv.All(
 )
 
 FINAL_VALIDATE_SCHEMA = uart.final_validate_device_schema(
-    "LD2412",
+    "LD2401P",
     require_tx=True,
     require_rx=True,
     parity="NONE",
@@ -79,20 +79,20 @@ async def to_code(config):
 
 CALIBRATION_ACTION_SCHEMA = maybe_simple_id(
     {
-        cv.Required(CONF_ID): cv.use_id(LD2412Component),
+        cv.Required(CONF_ID): cv.use_id(LD2401PComponent),
     }
 )
 
 
 # Actions
-BluetoothPasswordSetAction = LD2412_ns.class_(
+BluetoothPasswordSetAction = LD2401P_ns.class_(
     "BluetoothPasswordSetAction", automation.Action
 )
 
 
 BLUETOOTH_PASSWORD_SET_SCHEMA = cv.Schema(
     {
-        cv.Required(CONF_ID): cv.use_id(LD2412Component),
+        cv.Required(CONF_ID): cv.use_id(LD2401PComponent),
         cv.Required(CONF_PASSWORD): cv.templatable(cv.string_strict),
     }
 )
