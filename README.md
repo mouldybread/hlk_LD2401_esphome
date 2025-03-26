@@ -13,6 +13,25 @@ While this board claims to be 3.3V I have been able to power it with 5 volts via
 Configuration example
 --
 ```
+#System Params
+captive_portal:
+# Disable logging
+logger:
+  baud_rate: 0
+# Enable Home Assistant API
+api:
+#  encryption:
+#    key: !secret api_encryption_key
+# Disabled, occasionally causes issues when combined with HLK modules: https://github.com/esphome/issues/issues/5790
+ota:
+  platform: esphome
+  password: !secret ota_password
+
+safe_mode:
+  boot_is_good_after: 90s
+  num_attempts: 3
+
+#Load external components for radar peripheral
 external_components:
   - source:
       type: git
@@ -20,6 +39,19 @@ external_components:
       ref: main
     components: [LD2401P]
 
+
+#Hardware Params
+uart:
+  id: uart_bus
+  tx_pin: TX
+  rx_pin: RX
+  baud_rate: 256000
+  parity: NONE
+  stop_bits: 1
+
+#Peripheral & Sensor Params
+
+#Throttle the radar
 LD2401P:
   id: ld2401p
   throttle: 3s
@@ -196,7 +228,7 @@ number:
         name: g13 move threshold
       still_threshold:
         name: g13 still threshold
-  
+        
 select:
   - platform: LD2401P
     out_pin_level:
@@ -236,4 +268,4 @@ switch:
   - platform: LD2401P
     bluetooth:
       name: "Bluetooth"
-'''
+```
